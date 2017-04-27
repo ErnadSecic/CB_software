@@ -1,0 +1,24 @@
+		RSEG ICODE:CODE
+		CODE32
+
+		EXTERN Usart_c_irq_handler
+		PUBLIC ExternUARTISREntry
+
+; Wrapper for the serial port interrupt service routine.  This can cause a
+; context switch so requires an assembly wrapper.
+
+; Defines the portSAVE_CONTEXT and portRESTORE_CONTEXT macros.
+#include "ISR_Support.h"
+
+        ExternUARTISREntry:
+
+	portSAVE_CONTEXT			; Save the context of the current task.
+
+	bl	Usart_c_irq_handler				; Call the ISR routine.
+
+	portRESTORE_CONTEXT			; Restore the context of the current task -
+								; which may be different to the task that
+								; was interrupted.
+
+		END
+

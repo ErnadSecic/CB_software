@@ -1,0 +1,66 @@
+3.15 -> 3.16:
+Functionality has not been changed.
+bootloader files inkluds board.h (to simplify chages from ATSAM7S64 to  ATSAM7S128)
+3.16-> 3.17
+I2C init if error occurred.
+3.17->3.18
+Endring pga bootloader problemer. (Endret file: cdc_enumerate.c)
+
+Don't use 3.19 (used only for booting test)
+
+3.18->3.20
+Tilt sensor fix (avoid multiple event)
+
+3.20->3.21
+Reset delay  after booting. 
+
+
+3.21->3.22
+Changed 485. Older version can get problem with activation of product. 
+
+3.23->3.24
+This version is switching off lampe as early as posible to avoid noice problems on I2C bus.
+Older versions can get start-up problems on I2C (temperature or lamps on Boxio).
+!!! 3.23 and newer version must use fallsensor with LM75 IC. If older fallsensor with DS- IC 
+is used with this version, temperature reading error will occurre (low temperature: -102 [C])
+
+3.24->3.25 
+Introduced the new fallsensor calibration message. 
+
+3.24->3.25 
+I2C improvement. Older version read wrong temperature some times and disconnected lamps on Boxio will not be
+detected each time.
+
+3.25->3.26 
+1. Removed false fall after delivering. If user try to activate 2 product in the short time, second product will not be 
+delevered caused by false fall after previous delivering.
+2.LED lamp detection improvement. 
+3.bootloader: longer delay after booting. !!! DO NOT USE THIS VERSION. BOOTING ERROR
+
+3.26->3.27
+Introduced Watchdog
+Booting improvement (Flash Microsecond Cycle Number changed)
+
+3.27->3.28
+Watchdog: flag for debuging
+Fallsensor: changed stop-start logic
+
+3.28->3.29
+Kogg
+
+3.29->3.30
+Fall sensor, event if sum changed
+
+3.30->3.31
+Fall sensor, false evnets after enabling of fallsensor.
+
+3.31->3.32
+Fallsensor: if lamp is not connected, stop of fallsensor can occur
+
+3.32->3.33
+Fallsensor: error in 3.32 with autoadjust of ADC-referance
+
+3.33->3.34 
+Temp sensor - Bug fix: 	wrong format when temperature is 10 deg.
+Motor - Fix: 		Reset Bridge A & B active bit when door closing and when motor stop (dobbel security). The channel might
+             		hang if a user push two or more ejector switch at the same time.

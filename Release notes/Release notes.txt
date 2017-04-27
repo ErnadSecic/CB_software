@@ -1,0 +1,17 @@
+version 2.32 (2006-10-06 time: 08:37)
+	*. Add comments in code
+
+version 2.31 (2006-09-28 time: 11:26)
+	*. Bug fix ejector switch wildcard command for enable / disable
+
+version 2.30 (2006-09-27 time: 15:10) 
+	*. RS 485 optimse
+	*. RS 485 status 82 is implemented, means unstable RS 485, to mutch noice	
+
+version 2.29 (2006-09-22 time: 13:15) 
+
+	*. RS 485 optimse
+	*. ejector switch wildcard command for enable / disable
+	*. Tempsensor upgrade, HW must be DS1621, not LM75, on both fallsensor card, and CU card.
+	*. Fallsensor not at present detect.
+	(this is the upgrades sins version 2.25)

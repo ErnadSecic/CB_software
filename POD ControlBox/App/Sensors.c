@@ -27,6 +27,27 @@
 SENSOR_FLAGS  SENSOR_FLAGbits;
 int bTimerHasNotBeenSet = 1;
 
+
+//////////////////////////////////////////////////////////////////////////////
+// Function     : HatchSensor()
+// Purpose      : 
+// Parameters   :
+// Return value : true or false
+// Created      : 2016-11-22 by PS
+// Updated      :
+// Comments     :
+//////////////////////////////////////////////////////////////////////////////
+char HatchSensor(void)
+{
+   char answer;
+      
+   if(Sensor_In(HATCH_INPUT_BIT) == 1)
+     answer=1;  //open
+   else
+     answer=0;  //closed
+   return (answer);
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Function     : DoorSensor()
 // Purpose      : To
@@ -58,9 +79,9 @@ char DoorSensor(void)
 char FallSensor(int EqNo)  //Active low
 {
    char answer;
-   if(EqNo==1&&Sensor_In(FALL1_INPUT_BIT)==1)
-     answer=0;  //open
-   else if (EqNo==2&&Sensor_In(FALL2_INPUT_BIT)==1)
+//DEBUG..PS   if(EqNo==1&&Sensor_In(FALL1_INPUT_BIT)==1)
+//DEBUG..PS     answer=0;  //open
+   /*else */if (EqNo==2&&Sensor_In(FALL2_INPUT_BIT)==1)
      answer=0;  //open
    else
      answer=1;  //closed

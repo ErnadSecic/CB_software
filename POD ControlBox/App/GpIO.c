@@ -82,11 +82,11 @@ void Init_GPIO_Common(void)
 //////////////////////////////////////////////////////////////////////////////
 void Init_GPIO_for_SensorUnit(void)
 {
-   AT91C_BASE_PIOA->PIO_PER =   (FALL1_INPUT_BIT | BEAM_BIT | FALL2_INPUT_BIT | DOOROPN_BIT| RS485_RSEL_BIT |
+   AT91C_BASE_PIOA->PIO_PER =   ( HATCH_INPUT_BIT | /*FALL1_INPUT_BIT |*/ BEAM_BIT | FALL2_INPUT_BIT | DOOROPN_BIT| RS485_RSEL_BIT |
                             //     RS485_DENA_BIT | LAMP_MASK | FALL_OUT_MASK | TILTS_BIT | FALL1_INPUT_AD1 | NC_SENS_MASK); // Set in PIO mode
                                  RS485_DENA_BIT | LAMP_MASK | FALL_OUT_MASK | TILTS_BIT | NC_SENS_MASK);
 
-   AT91C_BASE_PIOA->PIO_ODR =   (FALL1_INPUT_BIT | FALL2_INPUT_BIT | DOOROPN_BIT | TILTS_BIT | FALL1_INPUT_AD1 ); // input
+   AT91C_BASE_PIOA->PIO_ODR =   ( HATCH_INPUT_BIT | /*FALL1_INPUT_BIT |*/ FALL2_INPUT_BIT | DOOROPN_BIT | TILTS_BIT | FALL1_INPUT_AD1 ); // input
 
    AT91C_BASE_PIOA->PIO_OER =   (BEAM_BIT | LAMP_MASK | FALL_OUT_MASK |
                                  RS485_RSEL_BIT | RS485_DENA_BIT | NC_SENS_MASK); // output
@@ -134,8 +134,8 @@ void Init_GPIO_for_EjectorUnit( void )
    /////////////////////////////////////////////////////////////////////////////
    // Select witch pins will be used as PIO and wich as PERIPERIAL
    /////////////////////////////////////////////////////////////////////////////
-   pPio->PIO_PER = (MOTOR_MASK | EJSSCT_MASK | BEAM_BIT | FALL1_INPUT_BIT | FALL2_INPUT_BIT | DOOROPN_BIT | ADC_MASK | NC_MOTO_MASK); // Set in PIO mode
-   pPio->PIO_PDR = ((~MOTOR_MASK) & (~EJSSCT_MASK) & (~BEAM_BIT) & (~FALL1_INPUT_BIT) & (~FALL2_INPUT_BIT) & (~DOOROPN_BIT) & (~ADC_MASK) & (~NC_MOTO_MASK)); // Set other as periphial
+   pPio->PIO_PER = (MOTOR_MASK | EJSSCT_MASK | BEAM_BIT | HATCH_INPUT_BIT |/*FALL1_INPUT_BIT |*/ FALL2_INPUT_BIT | DOOROPN_BIT | ADC_MASK | NC_MOTO_MASK); // Set in PIO mode
+   pPio->PIO_PDR = ((~MOTOR_MASK) & (~EJSSCT_MASK) & (~BEAM_BIT) & (~HATCH_INPUT_BIT) & /*(~FALL1_INPUT_BIT) &*/ (~FALL2_INPUT_BIT) & (~DOOROPN_BIT) & (~ADC_MASK) & (~NC_MOTO_MASK)); // Set other as periphial
 
    /////////////////////////////////////////////////////////////////////////////
    // DIRECTION

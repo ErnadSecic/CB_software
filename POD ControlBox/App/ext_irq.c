@@ -36,10 +36,10 @@ __arm void vExt_ISR(void)
        OnFALL2_Interrupted_IRQ();
     }
 
-    if (interruptRegister & FALL1_INPUT_BIT)  //Fall1
-    {
-       OnFALL1_Interrupted_IRQ();
-    }
+//PS..    if (interruptRegister & FALL1_INPUT_BIT)  //Fall1
+//PS..    {
+//PS..       OnFALL1_Interrupted_IRQ();
+//PS..    }
 
     if (interruptRegister & TILTS_BIT)
     {
@@ -56,9 +56,9 @@ void Init_InetrruptsForSensorUnit(void)
    AT91PS_AIC     pAic;
    pAic = AT91C_BASE_AIC;
 
-   AT91F_AIC_ConfigureIt ( pAic, AT91C_ID_PIOA, PIO_INTERRUPT_LEVEL,AT91C_AIC_SRCTYPE_INT_LEVEL_SENSITIVE, vExternISREntry);
-   AT91F_PIO_InterruptEnable(AT91C_BASE_PIOA, (FALL1_INPUT_BIT | FALL2_INPUT_BIT | TILTS_BIT));
-   AT91F_PIO_InterruptDisable(AT91C_BASE_PIOA, ~(FALL1_INPUT_BIT | FALL2_INPUT_BIT | TILTS_BIT));
+//PS..   AT91F_AIC_ConfigureIt ( pAic, AT91C_ID_PIOA, PIO_INTERRUPT_LEVEL,AT91C_AIC_SRCTYPE_INT_LEVEL_SENSITIVE, vExternISREntry);
+//PS..   AT91F_PIO_InterruptEnable(AT91C_BASE_PIOA, (/*FALL1_INPUT_BIT |*/ FALL2_INPUT_BIT | TILTS_BIT));
+//PS..   AT91F_PIO_InterruptDisable(AT91C_BASE_PIOA, ~(/*FALL1_INPUT_BIT |*/ FALL2_INPUT_BIT | TILTS_BIT));
 	//* set the interrupt by software
-   AT91F_AIC_EnableIt (pAic, AT91C_ID_PIOA);
+//PS..   AT91F_AIC_EnableIt (pAic, AT91C_ID_PIOA);
 }

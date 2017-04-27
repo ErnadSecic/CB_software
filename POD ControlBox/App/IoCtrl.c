@@ -112,6 +112,14 @@ overload function changed (reverse limit and twin limit)
 3.42 > 3.43
 FWS_2FWS implemented for new microcontroller.
 
+3.43 > 3.44
+Relocated USB function into RAM, and optimized for Speed (Project options). This to run USB code faster.
+
+3.44 > 3.45
+Added Hatch switch. Read and send on USB when Hatch is open and close. PS! When debugging, remeber to 
+set Download -> Use Loader in Debug Options...
+
+
 */
 /////////////////////////////////////////////////////////////////////////////
 //               SOFTWARE VERSION
@@ -229,6 +237,7 @@ void ButtonPushedTest_MotorNotMoving(int iMotorNo);
 
 
 static char lastDoorOpenState = 0;
+static char lastHatchOpenState = 0; //V 3.45 (PS)
 //static char lastTiltState = 0;
 
 //static   int LengOfTempVal_1=0;
@@ -614,7 +623,7 @@ void EnableSensorInterruptAfterDelayTime(void)
     // first clear possible old interrupts
     AT91C_BASE_PIOA->PIO_ISR;
     // enable again interrupt
-    AT91F_PIO_InterruptEnable(AT91C_BASE_PIOA, FALL1_INPUT_BIT);
+    //DEBUG..PS  AT91F_PIO_InterruptEnable(AT91C_BASE_PIOA, FALL1_INPUT_BIT);
   }
 }
 
@@ -637,7 +646,7 @@ void SendEventIfSensorsInterrupted(void)
   char IRQ485 = 0;*/
 
 
-  if (isFALL1_Interrupted() == 1)
+/*  if (isFALL1_Interrupted() == 1)
   {
     nAnswer[0]=FallSensor(1)+0x30;
     ecomBuildEventMessage(ucResp, EQ_TYPE_FALL_SENSOR, 1, POD_EVENT,  1, nAnswer, EQ_STATUS_CMD_OK);
@@ -651,7 +660,7 @@ void SendEventIfSensorsInterrupted(void)
      ecomBuildEventMessage(ucResp, EQ_TYPE_FALL_SENSOR, 2, POD_EVENT,  1, nAnswer, EQ_STATUS_CMD_OK);
      // Send Event
      usbqWriteUsbMsg(ucResp);
-  }
+  } */
 
   sUSBvalue_msg[0]=isTILT_Interrupted();
   if(sUSBvalue_msg[0] == 1|| sUSBvalue_msg[0] == 2)
@@ -722,6 +731,7 @@ void SendEventIfSensorsInterrupted(void)
     }
   }
 
+  
   if (DoorSensor() == 1)
   {
      if (lastDoorOpenState == 0)
@@ -748,7 +758,43 @@ void SendEventIfSensorsInterrupted(void)
             lastDoorOpenState = 0;
          }
      }
-   }
+  }
+  
+  
+  //Check Hatch sensor -> V3.45 (PS)
+  if (HatchSensor() == 1)
+  {
+     //Hatch Open
+     if (lastHatchOpenState == 0)
+     {
+         vTaskDelay( 100 );//Prell delay
+         if (HatchSensor() == 1)
+         {
+            ecomBuildEventMessage(ucResp, EQ_TYPE_HATCH_SENSOR, 1, POD_EVENT, 1, "1", EQ_STATUS_CMD_OK);
+         // Send Event
+            usbqWriteUsbMsg(ucResp);
+            lastHatchOpenState = 1;
+         }
+     }
+  }
+  else
+  {
+     //Hatch Closed
+     if (lastHatchOpenState == 1)
+     {
+         vTaskDelay( 100 );//Prell delay
+         if (HatchSensor() == 0)
+         {
+            ecomBuildEventMessage(ucResp, EQ_TYPE_HATCH_SENSOR, 1, POD_EVENT, 1, "0", EQ_STATUS_CMD_OK);
+            usbqWriteUsbMsg(ucResp);
+            lastHatchOpenState = 0;
+         }
+     }
+  }
+  
+  
+  
+  
 }
 
 // USED BY BOOTLOADER
@@ -889,6 +935,19 @@ void ExecuteSensorCommand(unsigned char* ucReq)
           {
              ecomBuildResponse(ucReq, ucResp, 0, "", EQ_STATUS_EQUIPMENT_NO_ERROR);
           }
+      }
+      //Hatch Sensor -> 3.45 (PS)
+      else if (nEquipmentType == EQ_TYPE_HATCH_SENSOR)
+      {
+         if(nEquipmentNo==1)
+         {
+            nAnswer[0] = HatchSensor()+0x30;
+            ecomBuildResponse(ucReq, ucResp, 1, nAnswer, EQ_STATUS_CMD_OK);
+         }
+         else
+         {
+            ecomBuildResponse(ucReq, ucResp, 0, "", EQ_STATUS_EQUIPMENT_NO_ERROR);
+         }
       }
       else if (nEquipmentType == EQ_TYPE_CONTROL_BOX_SW_VER)                //Software version
          ecomBuildResponse(ucReq, ucResp, 4, pVersion, EQ_STATUS_CMD_OK);

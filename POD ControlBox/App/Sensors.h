@@ -31,6 +31,7 @@ void Start_Fall_2(void);
 void Stop_Tilt(void);
 void Start_Tilt(void);
 
+char HatchSensor(void);
 char DoorSensor(void);
 char Sensor_In(unsigned int sensor);
 char FallSensor(int EqNo);

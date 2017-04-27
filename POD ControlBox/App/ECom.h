@@ -30,6 +30,7 @@
 #define EQ_TYPE_FALL_SENSOR_CALIB         301
 #define EQ_TYPE_TILT_SENSOR               400
 #define EQ_TYPE_CAB_LIGHT_OR_BUZZOR       500
+#define EQ_TYPE_HATCH_SENSOR              501 //3.45 (PS)
 #define EQ_TYPE_EJECTOR                   600
 #define EQ_TYPE_EJECTOR_SWITCH            601
 #define EQ_TYPE_RS485                     700

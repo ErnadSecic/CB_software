@@ -119,11 +119,17 @@ Relocated USB function into RAM, and optimized for Speed (Project options). This
 Added Hatch switch. Read and send on USB when Hatch is open and close. PS! When debugging, remeber to 
 set Download -> Use Loader in Debug Options...
 
+3.45 > 3.46
+Fallsensor Off failure - Made changes in Fallsensor.c (Removed:Fall_3_Event_Enable_Disable(), Removed:Fall3_Event_Enable(), 
+Removed:Set on IR LED in Switch_IR_LED_IRQ() ), 
+Sensor.c (Set_Lamp - SetTimer to enable Fallsensor).
+Added Watch Dog in USB task.
+Added Send USB to Log when system restart ( 0001 9999 )
 
 */
 /////////////////////////////////////////////////////////////////////////////
 //               SOFTWARE VERSION
-unsigned char pVersion[5] = "3.44";
+unsigned char pVersion[5] = "3.46";
 /////////////////////////////////////////////////////////////////////////////
 
 /* Demo program include files. */
@@ -211,6 +217,7 @@ void ErrorControlTaskRun(void);
 void SensorControlTaskRun ( void);
 void SoftwareReset (void);
 int isLedOpen(int iMotorNo);
+void sendResetMessage(void); //PS..
 
 void ioCtrlStartMotor(int iMotorNo, unsigned char* ucReq, unsigned char* ucResp, int iCommand, int iStepCnt, int nDirection, int iSpeed, int iRegulateSpeed, int iTwinMotorNo, int iIsMainMotor);
 void ioCtrlOnCommandSetLED(unsigned char* ucReq, unsigned char* ucResp, int nLedNo);
@@ -264,6 +271,10 @@ void SensorControlTaskRun(void)
 {
    unsigned char ucRequest[USB_QUEUE_ITEM_LENGTH];
   // char TempToggle = 0;
+   
+   //DEBUG..PS - Send USB message, to log a reset..
+   sendResetMessage();
+   //DEBUG END
 
 
    timerSet(INX_RS485_MI_TX_TIMER, TIME_3_MS); // start MI_TX();
@@ -1009,7 +1020,7 @@ void ExecuteSensorCommand(unsigned char* ucReq)
             {
                if(nEquipmentNo==3)
                {
-                  Fall_3_Event_Enable_Disable(1);
+                  //PS.. Fall_3_Event_Enable_Disable(1);
                   Start_Fall_3();
                }
                else if(nEquipmentNo==2)
@@ -1024,7 +1035,7 @@ void ExecuteSensorCommand(unsigned char* ucReq)
                if(nEquipmentNo==3)
                {
                   Stop_Fall_3();
-                  Fall_3_Event_Enable_Disable(0);
+                  //PS.. Fall_3_Event_Enable_Disable(0);
                }
                else if(nEquipmentNo==2)
                   Stop_Fall_2();
@@ -2057,3 +2068,20 @@ void SoftwareReset (void)
     return;
 }
 
+
+//////////////////////////////////////////////////////////////////////////////
+// Function     : sendResetMessage()
+// Purpose      : Send USB msg to log a reset
+// Parameters   : None
+// Return value : None
+// Created      : 2016-12-08 by PS
+// Updated      : 2005-12-08 by PS
+// Comments     :
+//////////////////////////////////////////////////////////////////////////////
+void sendResetMessage(void)
+{
+  unsigned char ucResp[USB_QUEUE_ITEM_LENGTH];
+   
+  ecomBuildEventMessage(ucResp, 9999, 1, POD_EVENT, 1, "0", EQ_STATUS_CMD_OK);
+  usbqWriteUsbMsg(ucResp);
+}

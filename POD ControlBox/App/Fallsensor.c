@@ -16,7 +16,7 @@ static char IR_LED_NO            = 0;
 static int  bFallSensorReady     = 0;
 static int  bClearFlags          = 0;
 static int  m_nCycleCounter      = 0;
-static char bFallDisable         = 0;
+//PS.. static char bFallDisable         = 0;
 
 long nTempSum[16];
 long nSum[16];
@@ -54,7 +54,9 @@ void Switch_IR_LED_IRQ (void)
    IR_LED_NO++;
    if(IR_LED_NO==16)
      IR_LED_NO=0;
-   switch(IR_LED_NO)
+
+//PS..   
+/*   switch(IR_LED_NO)
    {
       case 0  : gpioSetBit(FALL_OUT_O0_BIT);
                 break;
@@ -89,7 +91,7 @@ void Switch_IR_LED_IRQ (void)
       case 15 : gpioSetBit(FALL_OUT_15_BIT);
                 break;
       default : break;
-   }
+   } */
 }
 
 
@@ -365,10 +367,11 @@ char isFall3_Enabled(void)
 // Updated      : 2006-04-11 by TAK
 // Comments     :
 //////////////////////////////////////////////////////////////////////////////
-void Fall_3_Event_Enable_Disable(char value)
+//PS.. 
+/*void Fall_3_Event_Enable_Disable(char value)
 {
      bFallDisable = value;
-}
+}*/
 
 //////////////////////////////////////////////////////////////////////////////
 // Function     : isFall3_Enable()
@@ -379,12 +382,13 @@ void Fall_3_Event_Enable_Disable(char value)
 // Updated      :
 // Comments     :
 //////////////////////////////////////////////////////////////////////////////
-char isFall3_Event_Enable(void)
+//PS.. 
+/*char isFall3_Event_Enable(void)
 {
    char chRet = bFallDisable;
 
    return chRet;
-}
+}*/
 
 
 //////////////////////////////////////////////////////////////////////////////

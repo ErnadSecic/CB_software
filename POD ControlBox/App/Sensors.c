@@ -142,10 +142,15 @@ char Set_Lamp(unsigned char value,int EqNo)
       gpioSetBit(LAMP2_BIT);
   ///  if(answer!=2)
   //  {
-      if (isFall3_Event_Enable() == 1)
-      {
-         timerSet(INX_LAMP_FALL_DELAY, TIME_500_MS);
-      }
+      
+    //DEBUG-PS.. 
+    /*if (isFall3_Event_Enable() == 1)
+    {
+       timerSet(INX_LAMP_FALL_DELAY, TIME_500_MS);
+    }*/
+    timerSet(INX_LAMP_FALL_DELAY, TIME_500_MS);
+    //DEBUG END
+    
     //}
   }
   return (answer);
